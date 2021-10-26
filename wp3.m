@@ -2,7 +2,8 @@ D = 1;
 fs = 44100;
 t = 0:(1/fs):D-(1/fs);    
 n = 1:1:D*fs;
-s = sinusoide(1,4000,t);
+s = sinusoide( ...
+    1,4000,t);
 tr = triangular(1.1,1.2*fs+1,t);
 c = comparador(s,tr);
 %subplot(2,1,1);
@@ -15,8 +16,10 @@ subplot(2,1,1);
 transformada = abs(fft(c));
 plot(n/length(n),transformada);
 subplot(2,1,2);
-filtrada = lpf(transformada);
-plot(n,filtrada);
+L = 3*10^-3;
+C = 1/12;
+filtrada = lpf(c,L,C);
+plot(n/length(n),abs(fft(filtrada)));
 
 function serra = dent_serra(A,fo,t)
     serra = 2*(A*mod(fo*t,1)-A/2);
@@ -43,11 +46,9 @@ function senyal= power_amplifier(G,s)
     senyal = G*s;
 end
 
-function senyal = lpf(s)
-    transformada = abs(fft(s));
-    [a,b] = max(transformada(5:length(transformada)));
-    a
-    b
-    senyal = zeros([length(transformada) 1]);
-    senyal(1:ceil(b*1.5)) = transformada(1:ceil(b*1.5));
+function senyal = lpf(s,L,C)
+    LC = L*C;
+    b = [1/LC];
+    a = [1/LC , 0 , 1];
+    senyal = filter(b,a,s);
 end
