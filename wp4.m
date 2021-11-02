@@ -5,12 +5,12 @@ Fs           = 44100;
 duration     = 10;      
 Nbits        = 16;
 %generem la senyal que volem reproduir
-F       = 20000;                        
+F       = 1000;                        
 samples = duration*Fs;
-fmi     = (0:1:samples-1)'./(samples-1); 
-x       = pi*(F/Fs)*(0:samples-1)';
+t = 0:(1/Fs):duration-(1/Fs);    
+
 %chirp
-y(:,1)  = sin(x.*fmi);                  
+y(:,1)  = sin(2*pi*F*t);                  
 y(:,2)  = y(:,1);
 %soroll blanc gaussià
 % y(:,1)  = ;                  
@@ -34,8 +34,8 @@ THD_ = thd(y,signal,samples)
 
 %funcions prèvies
 function guany = guany(x,y,mostres)
-    px = (x*x)/mostres;
-    py = (y.*y)/mostres;
+    px = (x(1).*x(1))/mostres;
+    py = (y(1).*y(1))/mostres;
     guany = sqrt(py/px);
 end
 
