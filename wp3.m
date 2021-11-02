@@ -1,11 +1,13 @@
+load gong.mat;
+
 D = 1;
 fs = 44100;
 t = 0:(1/fs):D-(1/fs);    
 n = 1:1:D*fs;
-f = 4000;
+f = 400;
 T = 1/fs;
-s = sinusoide(1,f,t);
-tr = triangular(1.1,1.2*fs+1,t);
+s = sinusoide(1,f,t) + 1/2*sinusoide(1,2*f,t) + 1/3*sinusoide(1,3*f,t) + 1/4*sinusoide(1,4*f,t);
+tr = triangular(1.1,f*20,t);
 c = comparador(s,tr);
 %subplot(2,1,1);
 %plot(t,s);
@@ -13,12 +15,15 @@ c = comparador(s,tr);
 %plot(t,tr);
 %subplot(2,1,1);
 %plot(t,c);
-subplot(2,1,1);
+figure(1);
+subplot(3,1,1);
+plot(n/length(n),abs(fft(s)));
+subplot(3,1,2);
 transformada = abs(fft(c));
 plot(n/length(n),transformada);
-subplot(2,1,2);
-L = 1*10^-5;
-C = 4*10^-7;
+subplot(3,1,3);
+L = 1*10^-4;
+C = 4*10^-5;
 R = 8;
 filtrada = lpf(c,R,L,C,T);
 plot(n/length(n),abs(fft(filtrada)));
@@ -28,6 +33,20 @@ subplot(2,1,1);
 plot(t,s);
 subplot(2,1,2);
 plot(t,filtrada);
+
+player = audioplayer(s,fs);
+player2 = audioplayer(c,fs);
+player3 = audioplayer(filtrada,fs);
+
+play(player);
+pause;
+%delay(1000);
+%wait(1000);
+play(player2);
+pause;
+%wait(1000);
+play(player3);
+
 
 function serra = dent_serra(A,fo,t)
     serra = 2*(A*mod(fo*t,1)-A/2);
@@ -61,5 +80,5 @@ function senyal = lpf(s,R,L,C,T)
     alfa = (-1) * theta * wo * T;
     b = [exp(alfa)*sin(phi) 0];
     a = [1 -2*exp(alfa)*cos(phi) exp(2*alfa)];
-    senyal = filter(b,a,s);
+    senyal = wo/sqrt(1-theta^2)*filter(b,a,s);
 end
