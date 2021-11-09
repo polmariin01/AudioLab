@@ -5,16 +5,18 @@ n = 1:1:D*fs;
 f = 400;
 T = 1/fs;
 
-s = sinusoide(1,f,t) + 1/2*sinusoide(1,2*f,t) + 1/3*sinusoide(1,3*f,t) + 1/4*sinusoide(1,4*f,t);
+s = sinusoide(1,f,t);
 tr = triangular(1.1,f*20,t);
 c = comparador(s,tr);
-%subplot(2,1,1);
-%plot(t,s);
-%subplot(2,1,2);
-%plot(t,tr);
-%subplot(2,1,1);
-%plot(t,c);
 figure(1);
+subplot(3,1,1);
+plot(t,s);
+subplot(3,1,2);
+plot(t,tr);
+subplot(3,1,3);
+plot(t,c);
+linkaxes;
+figure(2);
 subplot(3,1,1);
 plot(n/length(n),abs(fft(s)));
 subplot(3,1,2);
@@ -27,7 +29,7 @@ R = 8;
 filtrada = lpf(c,R,L,C,T);
 plot(n/length(n),abs(fft(filtrada)));
 
-figure(2);
+figure(3);
 subplot(2,1,1);
 plot(t,s);
 subplot(2,1,2);
@@ -80,4 +82,6 @@ function senyal = lpf(s,R,L,C,T)
     b = [exp(alfa)*sin(phi) 0];
     a = [1 -2*exp(alfa)*cos(phi) exp(2*alfa)];
     senyal = wo/sqrt(1-theta^2)*filter(b,a,s);
+    figure(4);
+    freqz(b,a,1024);
 end
