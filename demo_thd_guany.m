@@ -1,14 +1,18 @@
 fs = 44100;           
-duration = 1;              
-f = 3000; 
+duration = 0.01;              
+f = 10000; 
 mostres = duration*fs;
-t = 0:(1/fs):duration-(1/fs);    
+t = 0:(1/fs):duration-(1/fs);
+t2 = 0:(1/fs):2*duration-(1/fs);
 n = 1:1:mostres;      
 
 %mesura de la THD 
 A = 1;
 o = A*sin(2*pi*n*(f/fs)); %senyal original
 d = o+ A/4*sin(2*pi*n*(2*f/fs))+ A/8*sin(2*pi*n*(3*f/fs))+ A/32*sin(2*pi*n*(4*f/fs)); %senyal amb distorsió interharmònica
+td = fft(d);
+u = 1:1:1024;
+plot(u,abs(fft(o,1024)));
 a = 5*o;
 G = guany(o,a,mostres)
 distor = thd(o,d,mostres)
