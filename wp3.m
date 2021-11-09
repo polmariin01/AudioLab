@@ -5,46 +5,48 @@ n = 1:1:D*fs;
 f = 400;
 T = 1/fs;
 
-s = sinusoide(1,f,t) + 1/2*sinusoide(1,2*f,t) + 1/3*sinusoide(1,3*f,t) + 1/4*sinusoide(1,4*f,t);
+s = sinusoide(1,f,t);
 tr = triangular(1.1,f*20,t);
 c = comparador(s,tr);
+figure(1);
+subplot(3,1,1);
+plot(t,s);
+subplot(3,1,2);
+plot(t,tr);
+subplot(3,1,3);
+plot(t,c);
+linkaxes;
+figure(2);
+subplot(3,1,1);
+plot(n/length(n),abs(fft(s)));
+subplot(3,1,2);
+transformada = abs(fft(c));
+plot(n/length(n),transformada);
+subplot(3,1,3);
+L = 1*10^-4;
+C = 4*10^-5;
+R = 8;
+filtrada = lpf(c,R,L,C,T);
+plot(n/length(n),abs(fft(filtrada)));
+
+figure(3);
 subplot(2,1,1);
 plot(t,s);
 subplot(2,1,2);
-plot(t,tr);
-subplot(2,1,1);
-plot(t,c);
-% figure(1);
-% subplot(3,1,1);
-% plot(n/length(n),abs(fft(s)));
-% subplot(3,1,2);
-% transformada = abs(fft(c));
-% plot(n/length(n),transformada);
-% subplot(3,1,3);
-% L = 1*10^-4;
-% C = 4*10^-5;
-% R = 8;
-% filtrada = lpf(c,R,L,C,T);
-% plot(n/length(n),abs(fft(filtrada)));
-% 
-% figure(2);
-% subplot(2,1,1);
-% plot(t,s);
-% subplot(2,1,2);
-% plot(t,filtrada);
-% 
-% player = audioplayer(s,fs);
-% player2 = audioplayer(c,fs);
-% player3 = audioplayer(filtrada,fs);
-% 
-% play(player);
-% pause;
-% %delay(1000);
-% %wait(1000);
-% play(player2);
-% pause;
-% %wait(1000);
-% play(player3);
+plot(t,filtrada);
+
+player = audioplayer(s,fs);
+player2 = audioplayer(c,fs);
+player3 = audioplayer(filtrada,fs);
+
+play(player);
+pause;
+%delay(1000);
+%wait(1000);
+play(player2);
+pause;
+%wait(1000);
+play(player3);
 
 
 function serra = dent_serra(A,fo,t)
@@ -80,4 +82,6 @@ function senyal = lpf(s,R,L,C,T)
     b = [exp(alfa)*sin(phi) 0];
     a = [1 -2*exp(alfa)*cos(phi) exp(2*alfa)];
     senyal = wo/sqrt(1-theta^2)*filter(b,a,s);
+    figure(4);
+    freqz(b,a,1024);
 end
