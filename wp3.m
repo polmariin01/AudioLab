@@ -1,11 +1,10 @@
-load gong.mat;
-
 D = 1;
 fs = 44100;
 t = 0:(1/fs):D-(1/fs);    
 n = 1:1:D*fs;
 f = 400;
 T = 1/fs;
+
 s = sinusoide(1,f,t) + 1/2*sinusoide(1,2*f,t) + 1/3*sinusoide(1,3*f,t) + 1/4*sinusoide(1,4*f,t);
 tr = triangular(1.1,f*20,t);
 c = comparador(s,tr);
