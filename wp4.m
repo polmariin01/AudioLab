@@ -5,7 +5,7 @@ Fs           = 44100;
 duration     = 10;      
 Nbits        = 16;
 %generem la senyal que volem reproduir
-F       = 1000;                        
+F= 1000;                        
 samples = duration*Fs;
 t = 0:(1/Fs):duration-(1/Fs);    
 

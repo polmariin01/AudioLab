@@ -2,7 +2,7 @@ D = 1;
 fs = 44100;
 t = 0:(1/fs):D-(1/fs);    
 n = 1:1:D*fs;
-f = 400;
+f = 40;
 T = 1/fs;
 
 s = sinusoide(1,f,t);
@@ -23,17 +23,15 @@ subplot(3,1,2);
 transformada = abs(fft(c));
 plot(n/length(n),transformada);
 subplot(3,1,3);
-L = 1*10^-4;
-C = 4*10^-5;
+L = 87*10^-6;
+C = 0.68*10^-6;
 R = 8;
-filtrada = lpf(c,R,L,C,T);
-plot(n/length(n),abs(fft(filtrada)));
+filtrada = lpf(c,R,L,C,T,fs);
+% plot(n/length(n),abs(fft(filtrada)));
 
-figure(3);
-subplot(2,1,1);
-plot(t,s);
-subplot(2,1,2);
+
 plot(t,filtrada);
+
 
 player = audioplayer(s,fs);
 player2 = audioplayer(c,fs);
@@ -74,14 +72,39 @@ function senyal= power_amplifier(G,s)
     senyal = G*s;
 end
 
-function senyal = lpf(s,R,L,C,T)
-    wo = 1/sqrt(L*C);
-    theta = 1/(2*R)*sqrt(L/C);
-    phi = wo * sqrt(1 - theta^2 )* T;
-    alfa = (-1) * theta * wo * T;
-    b = [exp(alfa)*sin(phi) 0];
-    a = [1 -2*exp(alfa)*cos(phi) exp(2*alfa)];
-    senyal = wo/sqrt(1-theta^2)*filter(b,a,s);
-    figure(4);
-    freqz(b,a,1024);
-end
+function senyal = lpf(s,R,L,C,T,fs)
+%     wo = 1/sqrt(L*C);
+%     theta = 1/(2*R)*sqrt(L/C);
+%     phi = wo * sqrt(1 - theta^2 )* T;
+%     alfa = (-1) * theta * wo * T;
+%     b = [exp(alfa)*sin(phi) 0];
+%     a = [1 -2*exp(alfa)*cos(phi) exp(2*alfa)];
+%     senyal = wo/sqrt(1-theta^2)*filter(b,a,s);
+%     figure(4);
+%     freqz(b,a,1024);
+
+LC = L*C;
+RC = R*C;
+b  = [1/LC 2/LC 1/LC];
+a = [(1+1/RC+1/LC) (2/LC-2) (1-1/RC+1/LC)]
+senyal = filter(b,a,s);
+figure(4);
+freqz(,a,1024);
+
+% wo = 1/(L*C);
+% theta = L/(2*R);
+% T = 1/fs;
+% 
+% a = wo / sqrt(1 - theta^2);
+% 
+% b =  wo * sqrt(1 - theta^2) * T;
+% 
+% c = (-1) * theta * wo * T;
+% 
+% num = a * [exp(c)*sin(b) 0];
+% 
+% den = [1 -2*exp(c)*cos(b) exp(2*c)];
+% senyal = filter(num,den,s);
+%  figure(4);
+%  freqz(num,den,1024);
+ end
