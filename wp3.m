@@ -9,13 +9,13 @@ s = sinusoide(1,f,t);
 tr = triangular(1.1,f*20,t);
 c = comparador(s,tr);
 figure(1);
-% subplot(3,1,1);
-% plot(t,s);
-% subplot(3,1,2);
-% plot(t,tr);
-% subplot(3,1,3);
-% plot(t,c);
-%linkaxes;
+subplot(3,1,1);
+plot(t,s);
+subplot(3,1,2);
+plot(t,tr);
+subplot(3,1,3);
+plot(t,c);
+linkaxes;
 figure(2);
 % subplot(3,1,1);
 % plot(n/length(n),abs(fft(s)));
@@ -33,18 +33,18 @@ filtrada = lpf(c,R,L,C,fs);
 plot(t,filtrada);
 
 
-player = audioplayer(s,fs);
-player2 = audioplayer(c,fs);
-player3 = audioplayer(filtrada,fs);
-
-play(player);
-pause;
-%delay(1000);
-%wait(1000);
-play(player2);
-pause;
-%wait(1000);
-play(player3);
+% player = audioplayer(s,fs);
+% player2 = audioplayer(c,fs);
+% player3 = audioplayer(filtrada,fs);
+% 
+% play(player);
+% pause;
+% %delay(1000);
+% %wait(1000);
+% play(player2);
+% pause;
+% %wait(1000);
+% play(player3);
 
 
 function serra = dent_serra(A,fo,t)
