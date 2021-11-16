@@ -1,13 +1,14 @@
-D = 1;
-fs = 6000000;
+%creem les senyals
+D = 0.0003;
+fs = 600000;
 t = 0:(1/fs):D-(1/fs);    
 n = 1:1:D*fs;
-f = 5000;
+f = 20000;
 T = 1/fs;
-
 s = sinusoide(1,f,t);
 tr = triangular(1.1,f*20,t);
 c = comparador(s,tr);
+%les visualitzem
 figure(1);
 subplot(3,1,1);
 plot(t,s);
@@ -15,35 +16,19 @@ subplot(3,1,2);
 plot(t,tr);
 subplot(3,1,3);
 plot(t,c);
-linkaxes;
-
-% subplot(3,1,1);
-% plot(n/length(n),abs(fft(s)));
-% subplot(3,1,2);
-transformada = abs(fft(c));
-%plot(n/length(n),transformada);
-%subplot(3,1,3);
-L = 87*10^-6;
-C = 0.68*10^-6;
-R = 16;
-filtrada = lpf(c,R,L,C,fs);
-plot(t,filtrada)
-plot(abs(fft(filtrada)));
-
-player = audioplayer(s,fs);
-player2 = audioplayer(c,fs);
-player3 = audioplayer(filtrada,fs);
-
-playblocking(player);
-
-%delay(1000);
-%wait(1000);
-playblocking(player2);
-pause;
-%wait(1000);
-playblocking(player3);
+%transformada de la pmw
+% transformada = abs(fft(c));
+% figure(2);
+% plot(transformada);
 
 
+
+
+
+
+
+
+%funcions previes
 function serra = dent_serra(A,fo,t)
     serra = 2*(A*mod(fo*t,1)-A/2);
 end
