@@ -9,24 +9,24 @@ s = sinusoide(1,f,t);
 tr = triangular(1.1,f*20,t);
 c = comparador(s,tr);
 figure(1);
-subplot(3,1,1);
-plot(t,s);
-subplot(3,1,2);
-plot(t,tr);
-subplot(3,1,3);
-plot(t,c);
-linkaxes;
+% subplot(3,1,1);
+% plot(t,s);
+% subplot(3,1,2);
+% plot(t,tr);
+% subplot(3,1,3);
+% plot(t,c);
+%linkaxes;
 figure(2);
-subplot(3,1,1);
-plot(n/length(n),abs(fft(s)));
-subplot(3,1,2);
+% subplot(3,1,1);
+% plot(n/length(n),abs(fft(s)));
+% subplot(3,1,2);
 transformada = abs(fft(c));
-plot(n/length(n),transformada);
-subplot(3,1,3);
+%plot(n/length(n),transformada);
+%subplot(3,1,3);
 L = 87*10^-6;
 C = 0.68*10^-6;
 R = 8;
-filtrada = lpf(c,R,L,C,T,fs);
+filtrada = lpf(c,R,L,C,fs);
 % plot(n/length(n),abs(fft(filtrada)));
 
 
@@ -72,7 +72,7 @@ function senyal= power_amplifier(G,s)
     senyal = G*s;
 end
 
-function senyal = lpf(s,R,L,C,T,fs)
+function senyal = lpf(s,R,L,C,fs)
 %     wo = 1/sqrt(L*C);
 %     theta = 1/(2*R)*sqrt(L/C);
 %     phi = wo * sqrt(1 - theta^2 )* T;
@@ -86,10 +86,10 @@ function senyal = lpf(s,R,L,C,T,fs)
 LC = L*C;
 RC = R*C;
 b  = [1/LC 2/LC 1/LC];
-a = [(1+1/RC+1/LC) (2/LC-2) (1-1/RC+1/LC)]
+a = [(4*fs^2+2*fs/RC+1/LC) (2/LC-8*fs^2) (4*fs^2-2*fs/RC+1/LC)]
 senyal = filter(b,a,s);
 figure(4);
-freqz(,a,1024);
+freqz(b,a,1024);
 
 % wo = 1/(L*C);
 % theta = L/(2*R);

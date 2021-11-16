@@ -9,12 +9,12 @@ n = 1:1:mostres;
 %mesura de la THD 
 A = 1;
 o = A*sin(2*pi*n*(f/fs)); %senyal original
-d = o+ A/4*sin(2*pi*n*(2*f/fs))+ A/8*sin(2*pi*n*(3*f/fs))+ A/32*sin(2*pi*n*(4*f/fs)); %senyal amb distorsió interharmònica
+d = o+ A/2*sin(4*pi*n*(2*f/fs))+ A/8*sin(2*pi*n*(3*f/fs))+ A/32*sin(2*pi*n*(4*f/fs)); %senyal amb distorsió interharmònica
 td = fft(d);
 u = 1:1:1024;
 plot(u,abs(fft(o,1024)));
 a = 5*o;
-G = guany(o,a,mostres)
+%G = guany(o,a,mostres)
 distor = thd(o,d,mostres)
 
 
