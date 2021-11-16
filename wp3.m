@@ -1,5 +1,5 @@
 D = 1;
-fs = 44100;
+fs = 44100*2;
 t = 0:(1/fs):D-(1/fs);    
 n = 1:1:D*fs;
 f = 40;
@@ -27,10 +27,10 @@ L = 87*10^-6;
 C = 0.68*10^-6;
 R = 8;
 filtrada = lpf(c,R,L,C,fs);
-% plot(n/length(n),abs(fft(filtrada)));
+plot(abs(fft(filtrada)));
 
 
-plot(t,filtrada);
+%plot(t,filtrada);
 
 
 % player = audioplayer(s,fs);
