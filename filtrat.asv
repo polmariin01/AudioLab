@@ -29,17 +29,15 @@ subplot(2,1,2);
 plot(t,filtrada);
 
 %transformada de la pmw i de la filtrada
-transformada = abs(fft(c));
-figure(3);
-subplot(3,1,1);
-plot((abs(fft(s))));
-title('Transformada de la senyal d"entrada');
-subplot(3,1,2);
-plot((transformada));
-title('Transformada de la PWM');
-subplot(3,1,3);
-plot((abs(fft(filtrada))));
-title('Transformada de la PWM filtrada');
+ transformada = 20*log(abs(fft(c)));
+ figure(3);
+ subplot(3,1,1);
+ plot(transformada);
+ title('');
+ subplot(3,1,2);
+ plot(20*log(abs(fft(filtrada))));
+ subplot(3,1,3);
+ plot(20*log(abs(fft(s))));
 
 
 
@@ -76,7 +74,7 @@ LC = L*C;
 RC = R*C;
 b  = [1/LC 2/LC 1/LC];
 a = [(4*fs^2+2*fs/RC+1/LC) (2/LC-8*fs^2) (4*fs^2-2*fs/RC+1/LC)]
-%figure(4);
-%freqz(b,a,1024);
+figure(4);
+freqz(b,a,1024);
 senyal = filter(b,a,s);
 end

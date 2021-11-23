@@ -1,15 +1,15 @@
 A = 2;
 fo = 20000;
 D = 0.0003;
-fs = 60000000;
+fs = 600000;
 t = 0:(1/fs):D-(1/fs);    
 n = 0:1:D*fs-(1/fs);
 a = dent_serra(4,15,t);
-a = dent_serra(2,2*fo,t);
+a = triangular(2,fo,t);
 plot(t,a);
 
-function serra = dent_serra(A,f,t)
-    serra = 2*(A*mod(f*t,1)-A/2);
+function serra = dent_serra(A,fo,t)
+    serra = 2*(A*mod(fo*t,1)-A/2);
 end
 function tr = triangular(A,fo,t)
     tr = 2*abs(dent_serra(A,fo,t))-A;
