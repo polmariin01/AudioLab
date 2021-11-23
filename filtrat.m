@@ -5,8 +5,9 @@ t = 0:(1/fs):D-(1/fs);
 n = 1:1:D*fs;
 f = 20000;
 T = 1/fs;
-s = sinusoide(1,f,t);
-tr = triangular(1.2,500e3,t);
+%s = sinusoide(1,f,t);
+s = sinusoide(1,8000,t)+sinusoide(1,17000,t)
+tr = triangular(2.2,500e3,t);
 c = comparador(s,tr);
 %les visualitzem
 figure(1);
@@ -28,14 +29,14 @@ plot(t,s);
 subplot(2,1,2);
 plot(t,filtrada);
 
-%transformada de la pmw i de la filtrada
-transformada = abs(fft(c));
+%transformades
+transformada = abs(fft(c))
 figure(3);
 subplot(3,1,1);
 plot((abs(fft(s))));
 title('Transformada de la senyal d"entrada');
 subplot(3,1,2);
-plot((transformada));
+plot((transformada+1));
 title('Transformada de la PWM');
 subplot(3,1,3);
 plot((abs(fft(filtrada))));
@@ -79,4 +80,25 @@ a = [(4*fs^2+2*fs/RC+1/LC) (2/LC-8*fs^2) (4*fs^2-2*fs/RC+1/LC)]
 %figure(4);
 %freqz(b,a,1024);
 senyal = filter(b,a,s);
+end
+
+function tren = polsos(A,fo,t)
+    a = sinusoide(A,fo,t);
+    for i = 1: length(a)
+        if(a(i)>0)
+            a(i) = 1;
+        else
+            a(i)=-1;
+        end
+    end
+    tren = a;
+end
+
+function s = soroll(var,t)
+    s = randn(var,length(t));
+end
+
+function c = chirp(f1,f2,A,t)
+    frec = linspace(f1,f2,length(t));
+    c = sin(2*pi*frec.*t);
 end
