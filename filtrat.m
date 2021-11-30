@@ -95,7 +95,7 @@ function tren = polsos(A,fo,t)
 end
 
 function s = soroll(var,t)
-    s = randn(var,length(t));
+    s = var.*randn(1,length(t));
 end
 
 function c = chirp(f1,f2,A,t)

@@ -32,8 +32,8 @@ classdef funcions
         RC = R*C;
         b  = [1/LC 2/LC 1/LC];
         a = [(4*fs^2+2*fs/RC+1/LC) (2/LC-8*fs^2) (4*fs^2-2*fs/RC+1/LC)]
-        figure(4);
-        freqz(b,a,1024);
+        %figure(4);
+        %freqz(b,a,1024);
         senyal = filter(b,a,s);
         end
         
@@ -49,8 +49,8 @@ classdef funcions
             tren = a;
         end
         
-        function s = soroll(var,t)
-            s = randn(var,length(t));
+        function s = soroll(var,t,n)
+            s = var.*randn(n,length(t));
         end
         
         function c = chirp(f1,f2,A,t)
