@@ -1,5 +1,5 @@
 fs = 44100;
-duration = 0.01;
+duration = 0.1;
 f = 10000;
 mostres = duration*fs;
 t = 0:(1/fs):duration-(1/fs);
@@ -21,9 +21,8 @@ end
 THDteo = sqrt(num)/A
 THDmesurat = thd(d)
 
-a = 5*d;
-G = guany(d,a)
-
+ampli = 5*d;
+G = guany(d,ampli)
 function THD = thd(d)
     td = abs(fft(d));
     Df = td(1:floor(length(td)/2));
@@ -36,12 +35,12 @@ function THD = thd(d)
     i = 1;
     while 1
         [y,x] = max(Df);
-        if(y<1e-10)
+        if(y<0.001)
             break;
         end
         Df = Df(x+1:length(Df));
-        figure(i+2);
-        plot(1:length(Df),Df);
+        %figure(i+2);
+        %plot(1:length(Df),Df);
         valors(i) = y;
         i = i+1;  
     end
