@@ -33,6 +33,7 @@ function THD = thd(d)
     figure(2);
     plot(1:length(Df),Df);
     i = 1;
+    valors = 0;
     while 1
         [y,x] = max(Df);
         if(y<0.001)
