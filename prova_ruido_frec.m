@@ -1,16 +1,17 @@
 %dibuixar repostes frecuencials
 %creem les senyals
 clear;
-D = 0.0003;
-fs = 1000000;
+D = 0.001;
+fs = 44100;
 t = 0:(1/fs):D-(1/fs);    
 n = 1:1:D*fs;
+F = 0:1/D:fs-(1/D);
 C = 470e-9;
 L = 22e-6;
 R = 5;
 
 %SOROLL GAUSSIÀ
-num = 100;
+num = 1000;
 soroll = funcions.soroll(1,t,num);
 % transformades = zeros(num,size(t));
 promedios = zeros(1,length(t));
@@ -39,17 +40,17 @@ promedios = promedios / (D*fs*num);
 % promig = promig / 100;
 
 figure(10)
-plot(t,promedios);
-figure(4)
-subplot(2,1,1);
-plot(t,soroll);
-subplot(2,1,2);
-plot(t,filtrades);
-title("Soroll i soroll filtrat");
-figure(5)
-plot(t*fs,20*log10(abs(fft(soroll_filtrat))));
-title("Resposta frecuencial del filtre (soroll)");
-figure(6)
-b= 20*log10(abs(fft(soroll_filtrat)));
-plot(t(1:fs*D/4)*fs,b(1:fs*D/4));
-title("Resposta frecuencial del filtre (soroll) ampliat");
+plot((F(1:round(D*fs/2))),20*log10(promedios(1:round(D*fs/2))));
+% figure(4)
+% subplot(2,1,1);
+% plot(t,soroll);
+% subplot(2,1,2);
+% plot(t,filtrades);
+% title("Soroll i soroll filtrat");
+% figure(5)
+%%plot(t*fs,20*log10(abs(fft(promedios))));
+% title("Resposta frecuencial del filtre (soroll)");
+% figure(6)
+% b= 20*log10(abs(fft(soroll_filtrat)));
+% plot(t(1:fs*D/4)*fs,b(1:fs*D/4));
+% title("Resposta frecuencial del filtre (soroll) ampliat");
