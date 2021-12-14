@@ -57,5 +57,36 @@ classdef funcions
             frec = linspace(f1,f2,length(t));
             c = sin(2*pi*frec.*t);
         end
+        function g = guany(x,y)
+            px = (x(1).*x(1))/length(x);
+            py = (y(1).*y(1))/length(y);
+            g = sqrt(py/px);
+        end
+        function THD = thd(d)
+            td = abs(fft(d));
+            Df = td(1:floor(length(td)/2));
+            figure(1);
+            plot(1:length(Df),Df);
+            [a,b] = max(Df);
+            Df = Df(b+1:length(Df));
+            figure(2);
+            plot(1:length(Df),Df);
+            i = 1;
+            valors = 0;
+            while 1
+                [y,x] = max(Df);
+                if(y<0.001)
+                    break;
+                end
+                Df = Df(x+1:length(Df));
+                %figure(i+2);
+                %plot(1:length(Df),Df);
+                valors(i) = y;
+                i = i+1;  
+            end
+            v = valors.*valors;
+            w = sum(v);
+            THD = sqrt(w)/a;
+        end
     end
 end
