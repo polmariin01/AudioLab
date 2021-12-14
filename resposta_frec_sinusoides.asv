@@ -1,7 +1,0 @@
-clear;
-D = 0.001;
-fs = 10000000;
-t = 0:(1/fs):D-(1/fs);    
-n = 1:1:D*fs;
-freq = logspace(0,5,1000);
-frec = 

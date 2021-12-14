@@ -17,5 +17,5 @@ for i = 1:N
     guanys(i) = max(filtrada)/max(senyal);
 end
 
-semilogx(freq,20*log10(guanys));
+semilogx(freq,log10(guanys));
 
