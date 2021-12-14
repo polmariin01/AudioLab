@@ -26,7 +26,50 @@ signal = getaudiodata(recorder, 'single');
 
 %processem la senyal a la sortida del sistema
 G = guany(y,signal,samples)
-THD_ = thd(y,signal,samples)
+THD_ = thd2(signal)
+
+
+
+
+%GIL FREC RESP
+D = 0.1;
+fs = 10000000;
+t = 0:(1/fs):D-(1/fs);    
+n = 1:1:D*fs;
+
+N = 1000;
+freq = logspace(0,5,N);
+guanys = zeros(1,N);
+senyal = 0;
+
+for i = 1:N
+    senyal = senyal + sin(2*pi*freq(i)*t);
+end
+
+    y2(:,1)  = senyal;                  
+    y2(:,2)  = y2(:,1);
+    
+    player = audioplayer(y2, Fs, Nbits);
+    recorder = audiorecorder(Fs, Nbits, 1);
+    record(recorder,duration);
+    playblocking(player);
+    stop(recorder);
+    signal = getaudiodata(recorder, 'single');
+
+    guanys(i) = max(signal(:,1))/max(senyal);
+    
+figure(5)
+hold on
+semilogx(freq,20*log10(signal(:,1)));
+hold on
+semilogx(freq,20*log10(senyal));
+hold on
+semilogx(freq,20*log10(guanys));
+hold off
+
+
+
+
 
 
 
@@ -34,10 +77,34 @@ THD_ = thd(y,signal,samples)
 
 %funcions prèvies
 function guany = guany(x,y,mostres)
-    px = (x(1).*x(1))/mostres;
-    py = (y(1).*y(1))/mostres;
+    px = (x(1).*x(1));
+    py = (y(1).*y(1));
     guany = sqrt(py/px);
 end
+
+function THD = thd2(d)
+    td = abs(fft(d));
+%     Df = td(1:floor(length(td)/2));
+    len = floor(length(td)/2)
+    figure(1);
+    plot( 0:len -1 , td(1:len) ); 
+    
+    figure(2);
+    plot( 0:length(td) - 1, td);
+    
+    [a0,f0] = max(td(1:floor(len/2)));
+    num_har = floor(len / f0)
+    p_har = 0;
+    
+    for i = 2:num_har      
+        [ai,fi] = max( td( floor( (i) * f0 - 5 ) : floor( (i) * f0 + 5 ) ) );
+        p_har = p_har + ai^2;
+    end
+   
+    THD = sqrt(p_har)/a0;
+end
+
+
 
 function THD = thd(z,k,mostres)  %z senyal entrada, k senyal sortida
     Kf = fft(k);
