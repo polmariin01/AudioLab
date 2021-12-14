@@ -1,15 +1,21 @@
 clear;
-D = 0.01;
+D = 0.1;
 fs = 10000000;
 t = 0:(1/fs):D-(1/fs);    
 n = 1:1:D*fs;
 C = 470e-9;
 L = 22e-6;
 R = 8;
-freq = logspace(0,5,1000);
+N = 1000;
+freq = logspace(0,5,N);
+guanys = zeros(1,N);
 senyal = 0;
-for i = 0:1000
+
+for i = 1:N
     senyal = sin(2*pi*freq(i)*t);
     filtrada = funcions.lpf(senyal,R,L,C,fs);
-    funcions.guany
+    guanys(i) = max(filtrada)/max(senyal);
 end
+
+semilogx(freq,20*log10(guanys));
+
