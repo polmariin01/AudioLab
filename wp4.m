@@ -1,14 +1,14 @@
 %programa que envia un audio
 %en temps real medim el guany, la thd i (resposta frequencial)
 clear
-Fs           = 44100;   
-duration     = 10;      
+Fs           = 128000;   
+duration     = 5;      
 Nbits        = 16;
 %generem la senyal que volem reproduir
 F= 1000;                        
 samples = duration*Fs;
 t = 0:(1/Fs):duration-(1/Fs);    
-
+%%
 %chirp
 y(:,1)  = sin(2*pi*F*t);                  
 y(:,2)  = y(:,1);
@@ -30,14 +30,14 @@ THD_ = thd2(signal)
 
 
 
-
+%%
 %GIL FREC RESP
-D = 0.1;
-fs = 10000000;
-t = 0:(1/fs):D-(1/fs);    
-n = 1:1:D*fs;
+D = 1;
+fs = Fs;
+t = 0:(1/Fs):D-(1/Fs);    
+n = 1:1:D*Fs;
 
-N = 1000;
+N = 100;
 freq = logspace(0,5,N);
 guanys = zeros(1,N);
 senyal = 0;
@@ -59,12 +59,28 @@ end
     guanys(i) = max(signal(:,1))/max(senyal);
     
 figure(5)
+
+TF1 = abs(fft(senyal));
+TF2 = abs(fft(signal(:,1) , N));
+valors = zeros(2,N);
+
+for i = 1 : N -1
+    %a = TF1(round(freq(i+1)));
+    a = max( max(TF1(round(freq(i+1)) / Fs) - 1 , 1) : TF1(round(freq(i+1) )/Fs) +10);
+    valors(1,i) = a;
+    %valors(2,i) = TF2(round(freq(i+1)));
+end
+
+
+
+%freq2 = logspace(0,5,D*fs);
 hold on
-semilogx(freq,20*log10(signal(:,1)));
+semilogx(freq ,20*log10(valors(1,:)),'b');
 hold on
-semilogx(freq,20*log10(senyal));
+semilogx(freq ,20*log10(valors(2,:)),'r');
 hold on
-semilogx(freq,20*log10(guanys));
+%semilogx(freq2 ,
+%semilogx(freq ,20*log10(guanys));
 hold off
 
 
