@@ -1,6 +1,6 @@
 fs = 44100;
 duration = 0.1;
-f = 10000;
+f = 2000;
 mostres = duration*fs;
 t = 0:(1/fs):duration-(1/fs);
 t2 = 0:(1/fs):2*duration-(1/fs);
@@ -12,9 +12,9 @@ o = A*sin(2*pi*n*(f/fs)); %senyal original
 % d = o + 0.75*sin(2*pi*n*(1.2*f/fs))+ 0.5*sin(2*pi*n*(1.5*f/fs))+ 0.25*sin(2*pi*n*(2*f/fs));%senyal amb distorsió interharmònica
 d = o;
 num = 0;
-for j = 1:2
-    Aj = 1-0.1*j;
-    fj = (1+0.1*j)*f;
+for k = 2 : floor(fs/2 / f)
+    Aj = 2^(-k);
+    fj = k*f;
     d = d + Aj*sin(2*pi*n*(fj/fs));
     num = num + Aj^2;
 end
@@ -23,31 +23,27 @@ THDmesurat = thd(d)
 
 ampli = 5*d;
 G = guany(d,ampli)
+
 function THD = thd(d)
     td = abs(fft(d));
-    Df = td(1:floor(length(td)/2));
+%     Df = td(1:floor(length(td)/2));
+    len = floor(length(td)/2)
     figure(1);
-    plot(1:length(Df),Df);
-    [a,b] = max(Df);
-    Df = Df(b+1:length(Df));
+    plot( 0:len -1 , td(1:len) ); 
+    
     figure(2);
-    plot(1:length(Df),Df);
-    i = 1;
-    valors = 0;
-    while 1
-        [y,x] = max(Df);
-        if(y<0.001)
-            break;
-        end
-        Df = Df(x+1:length(Df));
-        %figure(i+2);
-        %plot(1:length(Df),Df);
-        valors(i) = y;
-        i = i+1;  
+    plot( 0:length(td) - 1, td);
+    
+    [a0,f0] = max(td(1:floor(len/2)));
+    num_har = floor(len / f0)
+    p_har = 0;
+    
+    for i = 2:num_har      
+        [ai,fi] = max( td( floor( (i) * f0 - 5 ) : floor( (i) * f0 + 5 ) ) );
+        p_har = p_har + ai^2;
     end
-    v = valors.*valors;
-    w = sum(v);
-    THD = sqrt(w)/a;
+   
+    THD = sqrt(p_har)/a0;
 end
 
 function g = guany(x,y)
