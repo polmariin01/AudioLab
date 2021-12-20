@@ -58,9 +58,9 @@ classdef funcions
             c = sin(2*pi*frec.*t);
         end
         function g = guany(x,y)
-            px = (x(1).*x(1))/length(x);
-            py = (y(1).*y(1))/length(y);
-            g = sqrt(py/px);
+            px = sum(x.*x)
+            py = sum(y.*y)
+            g  = sqrt(py/px);
         end
         function THD = thd(d)
             td = abs(fft(d));
