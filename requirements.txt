@@ -1,0 +1,23 @@
+Requirements for running Audiolab by Grup 3
+*******************************************
+
+Audiolab is a software developed by UPC students with the intention
+of analysing audio amplifiers and their features. The software provides
+the user with usefull tools aimed at audio processing such as signal
+generation, amplifier class-D simulation amplifier parameters measuring.
+
+
+In order to run the Audilab software yout device requires the following items:
+
+- At least two D/A & A/D converters
+- Matlab 2019 or newer
+- At least 250KB of memory
+- There is no internet connection needed
+
+
+External necesities:
+
+- You will need an amplifier or system you want to test. It can be an audio
+  amplifier, a wire, a band pass filter or anything you con connect to 
+  your device with a jack cable.
+- Power supply for your computer and your amplifier.
